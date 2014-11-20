@@ -76,6 +76,8 @@ public class RouteTrafficOptimizer
 				validRoute.totalcost+=road.cost;
 				road.routes.add(validRoute);
 			}
+			else
+				continue;
 			
 			if (road.destjunction==junctions)
 				validRoute.isComplete=true;
@@ -85,28 +87,6 @@ public class RouteTrafficOptimizer
 			if (junction!=1)
 				backTraceRouteAndComplete(routekey,junction);
 			
-		}
-		
-	}
-
-	private static void backTraceRouteAndComplete(int routekey, int junction) {
-		
-		for(Road road:roaddetails)
-		{
-
-			if (junction==1)
-				return;
-			
-			Route validRoute=null;
-			if (road.destjunction==junction)
-			{
-				validRoute=validRoutes.get(routekey);
-				validRoute.roads.add(road);
-				validRoute.totalcost+=road.cost;
-				road.routes.add(validRoute);
-			}
-			
-			backTraceRouteAndComplete(routekey,road.startjunction);
 		}
 		
 	}

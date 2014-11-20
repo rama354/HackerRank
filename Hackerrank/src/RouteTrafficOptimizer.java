@@ -56,18 +56,17 @@ public class RouteTrafficOptimizer
 			Route validRoute=null;
 			if (road.startjunction==junction)
 			{
-								 
-				validRoute=new Route(new HashSet<Road>());
-				routekey=road.roadidx;
-				validRoute.routekey=routekey;
-				validRoutes.put(routekey, validRoute);
-					
-			}
-			else
-			{
+	
 				validRoute=validRoutes.get(routekey);
+				if (validRoute==null)
+				{
+					validRoute=new Route(new HashSet<Road>());
+					routekey=road.roadidx;
+					validRoute.routekey=routekey;
+					validRoutes.put(routekey, validRoute);
+				}
 				if (validRoute.isComplete)
-					return;
+					return;							 	
 			}
 			
 			if (!validRoute.roads.contains(road))
@@ -88,9 +87,7 @@ public class RouteTrafficOptimizer
 				backTraceRouteAndComplete(routekey,junction);
 			
 		}
-		
-	}
-
+	}	
 
 	private static int computeTollAndMaxCost() 
 	{

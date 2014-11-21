@@ -9,6 +9,13 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/*
+Identifying traffic routes between two junctions through a series of intermediate junctions connected by roads.
+Every road has a driving cost and every route cost will be sum of individual roads making up the route. 
+Make the driving cost of every route equal by adding a single toll on each route if required. The final driving cost 
+should be an optimized cost. If one road belongs to multiple routes then put toll on that road only if each route 
+tollcost is same (to arrive at final cost) else identify closest road to destination for each route.
+*/
 public class RouteTrafficOptimizer 
 {
 	private static List<Road> roaddetails=new LinkedList<Road>();
@@ -183,18 +190,22 @@ public class RouteTrafficOptimizer
 	
 
 	private static String[] outputStringArr(int finalCost) {
-		String[] output = new String[tollroads.size()+1];
-		int outidx=0;
-		output[outidx]=tollroads.size()+"#"+finalCost;
-		System.out.println(output[outidx++]);
-		for (Road tollroad:tollroads)
+		if(tollroads.size()!=0)
 		{
-			output[outidx]=tollroad.roadidx+"#"+tollroad.tollCost;
-			System.out.println(output[outidx++]);
+			String[] output = new String[tollroads.size()+1];
+			int outidx=0;
+			output[outidx++]=tollroads.size()+"#"+finalCost;
+			//System.out.println(output[outidx++]);
+			for (Road tollroad:tollroads)
+			{
+				output[outidx++]=tollroad.roadidx+"#"+tollroad.tollCost;
+				//System.out.println(output[outidx++]);
+			}
+						
+			return output;
 		}
-		
-		return output;
-		 
+		else
+		 	return new String[]{"No Solution"};
 	}
 	
 	

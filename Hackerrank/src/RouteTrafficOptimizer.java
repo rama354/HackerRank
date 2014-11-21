@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class RouteTrafficOptimizer 
 {
 	private static List<Road> roaddetails=new LinkedList<Road>();
 	private static Map<Integer,Route> validRoutes=new TreeMap<Integer,Route>();
 	private static int junctions;
-	private static List<Road> tollroads=new LinkedList<Road>();
+	private static Set<Road> tollroads=new TreeSet<Road>();
 	
 	public static void main(String[] args) {
 		 String[] input1=args[0].split("#");
@@ -58,36 +59,67 @@ public class RouteTrafficOptimizer
 			{
 	
 				validRoute=validRoutes.get(routekey);
-				if (validRoute==null)
+				if (validRoute==null || validRoute.isComplete)
 				{
 					validRoute=new Route(new HashSet<Road>());
 					routekey=road.roadidx;
 					validRoute.routekey=routekey;
 					validRoutes.put(routekey, validRoute);
+					if (junction!=1)
+						backTraceRouteAndComplete(routekey,road);
 				}
 				if (validRoute.isComplete)
-					return;							 	
-			}
+					return;		
+				
+				if (!validRoute.roads.contains(road))
+				{
+					validRoute.roads.add(road);
+					validRoute.totalcost+=road.cost;
+					road.routes.add(validRoute);
+				}
+				else
+					continue;
+				
+				if (road.destjunction==junctions)
+					validRoute.isComplete=true;
+				
+				identifyRoutes(routekey,road.destjunction);
+				
+				//if (junction!=1)
+					//backTraceRouteAndComplete(routekey,junction);
+			}				
 			
-			if (!validRoute.roads.contains(road))
+		}
+		
+	}
+
+	private static void backTraceRouteAndComplete(int routekey, Road road) {
+		
+		for(Road prevroad:roaddetails)
+		{
+			if (road.startjunction==1)
+				return;
+			
+			Route validRoute=null;
+			if (prevroad.destjunction==road.startjunction)
 			{
-				validRoute.roads.add(road);
-				validRoute.totalcost+=road.cost;
-				road.routes.add(validRoute);
+				validRoute=validRoutes.get(routekey);
+				if (!validRoute.roads.contains(prevroad))
+				{
+					validRoute.roads.add(prevroad);
+					validRoute.totalcost+=prevroad.cost;
+					prevroad.routes.add(validRoute);			
+				}
+				 
 			}
 			else
 				continue;
 			
-			if (road.destjunction==junctions)
-				validRoute.isComplete=true;
-					
-			identifyRoutes(routekey,road.destjunction);
-			
-			if (junction!=1)
-				backTraceRouteAndComplete(routekey,junction);
-			
+			backTraceRouteAndComplete(routekey,prevroad);
 		}
-	}	
+		
+	}
+
 
 	private static int computeTollAndMaxCost() 
 	{
@@ -104,12 +136,15 @@ public class RouteTrafficOptimizer
 			  route.tollcost=maxCostRoute.totalcost-route.totalcost;
 			  route.totalcost+=route.tollcost;
 			  
+			  if (route.tollcost==0)
+				  continue;
+			  
 			  int tolljunction=junctions;
 			  while(tolljunction>0)
 			  {
 				  for (Road road:route.roads)
 				  {			 
-					  if (route.tollroadidx==0 && !road.isTollRoad)
+					  if (route.tollroadidx==0 && !road.isTollRoad )
 					  {
 						  if (road.destjunction==tolljunction)
 						  {
@@ -163,7 +198,7 @@ public class RouteTrafficOptimizer
 	}
 	
 	
-	private static class Road{
+	private static class Road implements Comparable<Road>{
 		int roadidx;
 		int startjunction;
 		int destjunction;
@@ -178,6 +213,18 @@ public class RouteTrafficOptimizer
 			this.startjunction=startjunction;
 			this.destjunction=destjunction;
 			this.cost=cost;
+		}
+
+		@Override
+		public int compareTo(Road arg0) {
+			 if (roadidx > arg0.roadidx)
+				 return 1;
+			 
+			 if (roadidx < arg0.roadidx)
+				 return -1;
+			 
+			 return 0;
+				
 		}
 	}
 	

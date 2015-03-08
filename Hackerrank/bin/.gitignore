@@ -1,4 +1,7 @@
 /ANC.class
+/RouteTrafficOptimizer$Road.class
+/RouteTrafficOptimizer$Route.class
+/RouteTrafficOptimizer.class
 /arrayssort/
 /clairvoyant/
 /closetpoints/
@@ -8,9 +11,7 @@
 /dynamprog/
 /findcommonancestor/
 /flatten/
+/geometry/
 /iteration/
 /nlp/
-/strings/
-/warmup/
-/CircleCity.class
-/search/
+/numbertheory/

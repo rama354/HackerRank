@@ -15,7 +15,6 @@ public class EugeneBigNum {
 
 		int numoftcs = Integer.parseInt(br.readLine());
 
-		// System.out.println("numoftcs "+numoftcs);
 
 		if (numoftcs < 1 || numoftcs > 200)
 			return;
@@ -44,6 +43,8 @@ public class EugeneBigNum {
 
 	private static long findModulo(long inpA, long inpN, long inpM) {
 		BigDecimal inpX=BigDecimal.valueOf(inpA);
+		//long inpX=inpA;
+		
 		int numOfDigitsA=0;
 		
 		long tempA=inpA;
@@ -53,13 +54,17 @@ public class EugeneBigNum {
 		}
 		
 		BigDecimal multiplicand=BigDecimal.valueOf(Math.pow(10, numOfDigitsA));
+		//double multiplicand=Math.pow(10, numOfDigitsA);
 		
 		for(long i=1;i<inpN;i++){
 			inpX=inpX.multiply(multiplicand).add(BigDecimal.valueOf(inpA));
+											//.divideAndRemainder(BigDecimal.valueOf(1000000007L))[1];
+			//inpX=(long) ((inpX*multiplicand+inpA)%1000000007L);
 		
 		}
 		
 		return inpX.divideAndRemainder(BigDecimal.valueOf(inpM))[1].longValue();
+		//return inpX%inpM;
 		 
 		
 	}

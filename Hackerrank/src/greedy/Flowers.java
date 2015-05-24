@@ -46,7 +46,7 @@ public class Flowers {
 	private static int computeTotalCost(int flowercount, int buyercount,
 			Long[] flowerprices) 
 	{
-		 HashMap<Integer, String> perbuyer=new HashMap<Integer, String>();
+		 HashMap<Integer, ArrayList<Long>> perbuyer=new HashMap<Integer, ArrayList<Long>>();
 		 Arrays.sort(flowerprices, new Comparator<Long>() {
 
 			@Override
@@ -63,25 +63,32 @@ public class Flowers {
 		 
 		 List<Long> pricelist=new ArrayList<Long>(Arrays.asList(flowerprices));
 		 
-		 int iteration=1;
 		 
 		 while (pricelist.size()!=0)
 		 {
 			 for (int i=0;i<pricelist.size();i++)
 			 {
-				 long flowercost=iteration*pricelist.remove(0);
-				 perbuyer.put(i, iteration+" "+flowercost);
+				 ArrayList<Long> buyerlist=perbuyer.get(i);
+				 if (buyerlist==null)
+					 buyerlist=new ArrayList<Long>();
+				 
+				 buyerlist.add((buyerlist.size()+1)*pricelist.remove(0));
+				 perbuyer.put(i,buyerlist);
+				 
 				 if (i<=buyercount-1)
 					 continue;
 			 }
 			 
-			 iteration++;
 		 }
 		 
 		 int totalCost=0;
-		 for (String str:perbuyer.values()){
-			 String[] tokens=str.split(" ");
-			 totalCost+=Long.parseLong(tokens[1]);
+		 for (ArrayList<Long> list:perbuyer.values())
+		 {
+			 long perbuyertotal=0;
+			 for(long cost:list)
+				 perbuyertotal+=cost;
+			 
+			 totalCost+=perbuyertotal;
 		 }
 		 
 		 return totalCost;

@@ -54,7 +54,7 @@ public class NiceClique {
 						||primeDivcountA%2==primeDivcountB%2||primeDivcountA%3==primeDivcountB%3)
 						 
 						 
-					 
+					 ????
 				 }
 				
 			}

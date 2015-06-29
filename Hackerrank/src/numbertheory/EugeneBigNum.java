@@ -42,8 +42,8 @@ public class EugeneBigNum {
 	}
 
 	private static long findModulo(long inpA, long inpN, long inpM) {
-		BigDecimal inpX=BigDecimal.valueOf(inpA);
-		//long inpX=inpA;
+		//BigDecimal inpX=BigDecimal.valueOf(inpA);
+		long inpX=inpA;
 		
 		int numOfDigitsA=0;
 		
@@ -53,19 +53,20 @@ public class EugeneBigNum {
 			numOfDigitsA++;
 		}
 		
-		BigDecimal multiplicand=BigDecimal.valueOf(Math.pow(10, numOfDigitsA));
+		long multiplicand=(long) Math.pow(10, numOfDigitsA);
 		//double multiplicand=Math.pow(10, numOfDigitsA);
-		
-		for(long i=1;i<inpN;i++){
-			inpX=inpX.multiply(multiplicand).add(BigDecimal.valueOf(inpA));
-											//.divideAndRemainder(BigDecimal.valueOf(1000000007L))[1];
-			//inpX=(long) ((inpX*multiplicand+inpA)%1000000007L);
-		
+		long remainder=0;		
+		for(long iter=1;iter<inpN;iter++)
+		{			
+			inpX=(inpX*multiplicand)+inpA;											
+			if (iter%1000==0){
+				remainder+=inpX%inpM;
+				inpX=inpA;
+			}
 		}
+		return remainder;
 		
-		return inpX.divideAndRemainder(BigDecimal.valueOf(inpM))[1].longValue();
-		//return inpX%inpM;
-		 
+		//return inpX%inpM;	 
 		
 	}
 

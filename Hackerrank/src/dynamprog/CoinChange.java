@@ -45,14 +45,20 @@ public class CoinChange {
 		{
 			for (int i=1;i<=N;i++)
 			{
-				if(cointype[idx]*i==N)
-					count=1+countCombo(cointype,idx+1,N,0,M);
+				if (cointype[idx]*i>N)
+					count=countCombo(cointype,idx+1,N,0,M);
 				
+				else if(cointype[idx]*i==N)
+					count=1+countCombo(cointype,idx+1,N,0,M);
+
 				else
 				{
-					if (sum==N)
+					if (sum > N)
+						 count=countCombo(cointype,idx+1,N,0,M);
+				    else if (sum==N)
 						count=1+countCombo(cointype,idx+1,N,0,M);
-					else{
+					else
+					{
 						sum+=cointype[idx]*i;
 						countCombo(cointype,idx+1,N,sum,M);
 					}		

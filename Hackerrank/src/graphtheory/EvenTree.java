@@ -3,6 +3,7 @@ package graphtheory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class EvenTree {
@@ -10,6 +11,8 @@ public class EvenTree {
 	/**
 	 * @param args
 	 */
+	static boolean[] visited=null;
+	
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
@@ -26,35 +29,62 @@ public class EvenTree {
 			C++;
 		}
 		
-		HashMap<Integer,Integer> subtrees=new HashMap<Integer,Integer>();
+		Map<Integer,List<Integer>> adjclist=new HashMap<Integer,List<Integer>>(N);
 
 		for(String edge:edges){
 			String[] nodes=edge.split(" ");
 			int node0=Integer.parseInt(nodes[0]);
-			if(subtrees.containsKey(node0)){
-				int nodecount=subtrees.get(node0);
-				subtrees.put(node0, nodecount++);
+			int node1=Integer.parseInt(nodes[1]);
+			
+			List<Integer> adjvertices=adjclist.get(node0);
+			if (adjvertices==null){
+				adjvertices=new ArrayList<Integer>();
+				adjvertices.add(node1);
+				adjclist.put(node0, adjvertices);
 			}
-			else{
-				subtrees.put(node0, 1);
+			else
+				adjvertices.add(node1);
+			
+			
+			adjvertices=adjclist.get(node1);
+			if (adjvertices==null){
+				adjvertices=new ArrayList<Integer>();
+				adjvertices.add(node0);
+				adjclist.put(node1, adjvertices);
 			}
-	
+			else
+				adjvertices.add(node0);
+			
 		}
 		
+		visited=new boolean[N];
+		initialize();
+		int connectedComponents=0;
 		
-		//List<Integer> targetNodes=getEvenNodesSubTrees(subtrees);
+		for(int i = 1;i <=N;++i) 
+		{
+		     if(visited[i] == false){
+		         dfs(i);
+		         connectedComponents++;
+		     }
+		 }
 		
 	}
 
-	private static List<Integer> getEvenNodesSubTrees(HashMap<Integer, Integer> subtrees) {
-		List<Integer> tempNodes=new ArrayList<Integer>();
-		
-		for(Integer node:subtrees.keySet()){
-			if(subtrees.get(node)%2==0)
-				
-				
-		}
+	private static void dfs(int node) {
+		visited[node] = true;
+	    for(int i = 0;i < adj[s].size();++i)    {
+	     if(visited[adj[s][i]] == false)
+	         dfs(adj[s][i]);
+	    }
 		
 	}
+
+	private static void initialize() {
+		for(int i = 0;i < 10;++i)
+		     visited[i] = false;
+	}
+
+	
 
 }

@@ -8,10 +8,8 @@ import java.util.Scanner;
 
 public class EvenTree {
 
-	/**
-	 * @param args
-	 */
-	static boolean[] visited=null;
+	static Map<Integer,List<Integer>> adjclist=null;
+static Map<Integer,Boolean> visited=null;
 	
 	public static void main(String[] args) {
 		
@@ -29,7 +27,7 @@ public class EvenTree {
 			C++;
 		}
 		
-		Map<Integer,List<Integer>> adjclist=new HashMap<Integer,List<Integer>>(N);
+		adjclist=new HashMap<Integer,List<Integer>>(N);
 
 		for(String edge:edges){
 			String[] nodes=edge.split(" ");
@@ -57,13 +55,13 @@ public class EvenTree {
 			
 		}
 		
-		visited=new boolean[N];
+		visited=new HashMap<Integer,Boolean>(N);
 		initialize();
 		int connectedComponents=0;
 		
 		for(int i = 1;i <=N;++i) 
 		{
-		     if(visited[i] == false){
+		     if(visited.get(i) == false){
 		         dfs(i);
 		         connectedComponents++;
 		     }
@@ -72,19 +70,17 @@ public class EvenTree {
 	}
 
 	private static void dfs(int node) {
-		visited[node] = true;
-	    for(int i = 0;i < adj[s].size();++i)    {
-	     if(visited[adj[s][i]] == false)
-	         dfs(adj[s][i]);
-	    }
+		visited.put(node,true);
+		
+	    for(int i = 0;i<adjclist.get(node).size();++i)
+	    	if(visited.get(adjclist.get(node).get(i)) == false)
+	        		dfs(adjclist.get(node).get(i));
+	   
 		
 	}
 
 	private static void initialize() {
-		for(int i = 0;i < 10;++i)
-		     visited[i] = false;
+		for(int i = 1;i <= 10;++i)
+		    visited.put(i, false);
 	}
-
-	
-
 }

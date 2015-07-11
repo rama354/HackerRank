@@ -1,18 +1,18 @@
 package graphtheory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
 
 public class EvenTree {
 
     static Map<Integer,List<Integer>> adjclist=null;
     static Map<Integer,Boolean> visited=null;
-	static Map<Integer,Integer> disconnect=new HashMap<Integer,Integer>();
+    static int disconnect=0;
     static int rootNode;
+    
     public static void main(String[] args) {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
         Scanner sc = new Scanner(System.in);
@@ -59,45 +59,29 @@ public class EvenTree {
 		
 		rootNode=Integer.parseInt(edges[0].split(" ")[1]);
 		
-		visited=new HashMap<Integer,Boolean>(N);
-		initialize(N);
-		
-		
-		/*for(int i = 1;i <=N;++i) 
-		{
-		     if(visited.get(i) == false){
-		         dfs(i);
-		         connectedComponents++;
-		     }
-		 }*/
 		dfs(rootNode,0);
-        if (disconnect.containsKey(rootNode))
-			System.out.println(disconnect.size()-1);
-		else
-			System.out.println(disconnect.size());
-
+        System.out.println(disconnect);
     }
     
-    private static void dfs(int node,int parentNode) {
-		visited.put(node,true);
+     private static int dfs(int node,int parentNode) {
+		//visited.put(node,true);
+		int nodeCount=0;
+	    
 		
-	    /*for(int i = 0;i<adjclist.get(node).size();++i)
-	    	if(visited.get(adjclist.get(node).get(i)) == false)
-	        		dfs(adjclist.get(node).get(i));*/
-	   
-		if (node!=rootNode && (adjclist.get(node).size()+1)%2==0){
-			disconnect.put(parentNode, node);
-			return;
-		}
 		for(int i=0;i<adjclist.get(node).size();++i)
-			if(visited.get(adjclist.get(node).get(i)) == false && adjclist.get(node).get(i)!=parentNode)
-					dfs(adjclist.get(node).get(i),node);
-		
+			if(adjclist.get(node).get(i)!=parentNode)
+					nodeCount+=dfs(adjclist.get(node).get(i),node);
+            
+        if (node!=rootNode && (nodeCount+1)%2==0){
+			disconnect++;
+			return 0;
+		}
+		else
+            return nodeCount+1;
 	}
     
-    private static void initialize(int vertices) {
+     /*private static void initialize(int vertices) {
 		for(int i = 1;i <=vertices;++i)
 		    visited.put(i, false);
-	}
-
+	}*/
 }

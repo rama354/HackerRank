@@ -19,15 +19,15 @@ public class CircularPrimes {
 		Set<Integer> circularPrimes=new HashSet<Integer>();
 		long sum=0;
 		for (int i=2;i<N;i++){
-			System.out.println(i);
+			//System.out.println(i);
 			if (!isCircularPrime(i))
 				circularPrimes.add(i);
 		}
 					
-		for (int prime:circularPrimes)
-			sum+=prime;
+		/*for (int prime:circularPrimes)
+			sum+=prime;*/
 		
-		System.out.println(sum);
+		System.out.println(circularPrimes.size());
     }
     
     

@@ -28,7 +28,11 @@ public class ZeroOneMultiple {
         
 		while(true)
         {
-			 prevS.add(S);
+			if (S%num==0)
+				 return  Long.toString(S);
+			 else
+				 prevS.add(S);
+			
 			 S*=10; 
 			 
 			 ArrayList<Long> temp = new ArrayList<Long>();;
@@ -41,17 +45,7 @@ public class ZeroOneMultiple {
 					 temp.add(S+pS);
 			 }	 
 			 prevS.addAll(temp);
-			 
-			 if (S%num==0)
-				 return  Long.toString(S);
-			 else
-				 prevS.add(S);
-			 
-			 /*if (S+1%num==0)
-				 return  Long.toString(S+1);
-             else
-				 prevS.add(S+1);*/
-           
+		
             
 		}
 		

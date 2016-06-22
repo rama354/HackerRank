@@ -30,7 +30,7 @@ public class GoldBachConjecture {
 				 int j=n-i;
 				 double sqrt=Math.sqrt(j/2);
                  if (j%2==0 && Math.ceil(sqrt)==sqrt)
-                	 count++;
+                	 count=+1;
                  
 			 }
 			 

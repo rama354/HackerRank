@@ -35,7 +35,7 @@ public class ZeroOneMultiple {
 			
 			 S*=10; 
 			 
-			 ArrayList<Long> temp = new ArrayList<Long>();;
+			 ArrayList<Long> temp = new ArrayList<Long>();
 			 for (Long pS:prevS)
 			 {
 				 

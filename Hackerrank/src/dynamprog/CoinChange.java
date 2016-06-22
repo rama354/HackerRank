@@ -12,8 +12,9 @@ public class CoinChange {
 		// TODO Auto-generated method stub
 
 		Scanner sc = new Scanner(System.in);
-		int N=sc.nextInt();
-		int M=sc.nextInt();
+		String[] inp1=sc.nextLine().trim().split(" ");
+		int N=Integer.parseInt(inp1[0]);
+		int M=Integer.parseInt(inp1[1]);
 		
 		if (N<1|| N>250)
 			return;
@@ -21,54 +22,33 @@ public class CoinChange {
 		if (M<1|| M>50)
 			return;
 		
+		String[] inp2=sc.nextLine().trim().split(" ");
+		
 		int[] cointype=new int[M];
 		int C=0;
 		
 	    while(C<M)
-	    {
-	        cointype[C] = sc.nextInt();
-	        ++C;
-	    }
+	    	cointype[C]=Integer.parseInt(inp2[C++]);
+	       
 	    
 	    Arrays.sort(cointype);
-	    System.out.println(countCombo(cointype,0,N,0,M));
-	    //System.out.println(countChangeCombo(cointype,N));
+	    long finalcount=0;
+	    for(int coinval:cointype)
+	    	if(N%coinval==0)
+	    		finalcount++;
+	    
+	    System.out.println(finalcount+countCombo(cointype,N,0,0));
+	    
 	    
 	}
 
 	
 	
-	private static int countCombo(int[] cointype,int idx,int N,int sum,int M)
+	private static long countCombo(int[] cointype,int N,int M)
 	{
-	    int count=0;
-		while(idx<M)
-		{
-			for (int i=1;i<=N;i++)
-			{
-				if (cointype[idx]*i>N)
-					count=countCombo(cointype,idx+1,N,0,M);
-				
-				else if(cointype[idx]*i==N)
-					count=1+countCombo(cointype,idx+1,N,0,M);
-
-				else
-				{
-					if (sum > N)
-						 count=countCombo(cointype,idx+1,N,0,M);
-				    else if (sum==N)
-						count=1+countCombo(cointype,idx+1,N,0,M);
-					else
-					{
-						sum+=cointype[idx]*i;
-						countCombo(cointype,idx+1,N,sum,M);
-					}		
-						
-				}
-					
-			}
-		}
+		long count=0;
 		
-		return count;
+		
 	}
 
 }

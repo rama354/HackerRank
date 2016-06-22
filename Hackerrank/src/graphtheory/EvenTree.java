@@ -17,7 +17,7 @@ public class EvenTree {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
         Scanner sc = new Scanner(System.in);
 		int N=sc.nextInt();
-		int M=sc.nextInt();
+		int M=sc.
 		
 		if (N<2||N>100)
 			return;

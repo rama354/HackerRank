@@ -1,73 +1,74 @@
 package numbertheory;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class EugeneBigNum {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) throws Exception{
+    private static long defM=(long) (Math.pow(10, 9)+7);
+    
+    	public static void main(String[] args) throws Exception{
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Scanner sc = new Scanner(System.in);
 
-		int numoftcs = Integer.parseInt(br.readLine());
+		int numoftcs = sc.nextInt();
 
+		// System.out.println("numoftcs "+numoftcs);
 
 		if (numoftcs < 1 || numoftcs > 200)
 			return;
 		
 		while(numoftcs>0){
-			String[] inpVal=br.readLine().split(" ");
+			//String[] inpVal=sc.next().split(" ");
 			
-			long inpA=Long.parseLong(inpVal[0]);
-			if (inpA<0 || inpA>1000)
-				return;
+			String A=sc.next();
 			
-			long inpN=Long.parseLong(inpVal[1]);
-			if (inpN<=0 || inpN>=Math.pow(10, 12))
-				return;
+			long N=sc.nextLong();
+			long M=sc.nextLong();
 			
-			long inpM=Long.parseLong(inpVal[2]);
-			if (inpM<=1 || inpM>=Math.pow(10, 9))
-				return;
-			
-			System.out.println(findModulo(inpA,inpN,inpM));
+			System.out.println(findModulo(A,N,M));
 			
 			numoftcs--;
 		}
 
 	}
 
-	private static long findModulo(long inpA, long inpN, long inpM) {
-		//BigDecimal inpX=BigDecimal.valueOf(inpA);
-		long inpX=inpA;
+	private static long findModulo(String A, long N, long M) {
+		//List<String> XList=new ArrayList<String>();
 		
-		int numOfDigitsA=0;
-		
-		long tempA=inpA;
-		while(tempA>0){			
-			tempA=tempA/10;
-			numOfDigitsA++;
-		}
-		
-		long multiplicand=(long) Math.pow(10, numOfDigitsA);
-		//double multiplicand=Math.pow(10, numOfDigitsA);
-		long remainder=0;		
-		for(long iter=1;iter<inpN;iter++)
-		{			
-			inpX=(inpX*multiplicand)+inpA;											
-			if (iter%1000==0){
-				remainder+=inpX%inpM;
-				inpX=inpA;
+		long segment=1000000;
+		int count=0;
+		long carry=0,temp=0;
+		while(N-count*segment>0)
+		{	
+			StringBuilder X=new StringBuilder();
+			long remain=N-count*segment;
+			if (remain<segment)
+				segment=remain;
+			
+			for (int i=0;i<segment;i++){
+				 X.append(A);
 			}
+						
+			int startidx=0;
+			for (int i=1;i<=X.length();i++){
+				temp=Long.parseLong(carry+X.substring(startidx, i));
+				if (temp>=M){
+					carry=temp%M;
+					startidx=i;
+				}
+				
+			}
+			 
+			count++;
 		}
-		return remainder;
-		
-		//return inpX%inpM;	 
-		
+			
+		if (temp<M)
+			return temp;
+		else
+			return carry;
 	}
 
+	
 }

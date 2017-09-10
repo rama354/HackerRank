@@ -1,65 +1,91 @@
 package graphtheory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.Set;
 
 public class PrimMST {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
 		int N=sc.nextInt();
 		int M=sc.nextInt();
-	    int [][] wt_tree=new int[N+1][N+1];
-	    Map<Integer,ArrayList<Integer>> adjlist=new HashMap<Integer,ArrayList<Integer>>();
+	    Map<Integer,PriorityQueue<Edge>> adjlist=new HashMap<Integer,PriorityQueue<Edge>>();
 		while (M>0){
 			int x=sc.nextInt();
 			int y=sc.nextInt();
 			int w=sc.nextInt();
-			wt_tree[x][y]=w;
-			wt_tree[y][x]=w;
-			ArrayList<Integer> x_nodes=adjlist.get(x);
-			ArrayList<Integer> y_nodes=adjlist.get(y);
-			if (x_nodes==null)
-				x_nodes=new ArrayList<Integer>();
-			x_nodes.add(y);	
-			adjlist.put(x, x_nodes);
+			Edge edge=new Edge(x,y,w);
+			PriorityQueue<Edge> x_edges=adjlist.get(x);
+			PriorityQueue<Edge> y_edges=adjlist.get(y);
+			if (x_edges==null)
+				x_edges=new PriorityQueue<Edge>();
+			x_edges.add(edge);	
+			adjlist.put(x, x_edges);
 			
-			if (y_nodes==null)
-				y_nodes=new ArrayList<Integer>();
-			y_nodes.add(x);	
-			adjlist.put(y, y_nodes);
+			if (y_edges==null)
+				y_edges=new PriorityQueue<Edge>();
+			y_edges.add(edge);	
+			adjlist.put(y, y_edges);
 			
 			M--;
 		}
-		List<Integer> primNodeList=new ArrayList<Integer>();
-		primNodeList.add(sc.nextInt());
+		Set<Integer> primNodeSet=new HashSet<Integer>();
+		primNodeSet.add(sc.nextInt());
 		
 		int mst_wt=0;
-		while(primNodeList.size()<N)
+		while(primNodeSet.size()<N)
 		{
 			int min_wt=Integer.MAX_VALUE;
-			int mst_node=0;
-			for (int node:primNodeList)
+			Edge mst_edge=null;
+			for (int node:primNodeSet)
 			{
-				List<Integer> s_nodes=adjlist.get(node);
-				for( int s_node:s_nodes)
-				{
-					if (!primNodeList.contains(s_node) && wt_tree[node][s_node]>0)
-					{	
-						min_wt=Math.min(min_wt,wt_tree[node][s_node]);
-						mst_node=min_wt==wt_tree[node][s_node]?s_node:mst_node;
-					}
-				}	
+				PriorityQueue<Edge> edges=adjlist.get(node);
+				while(!edges.isEmpty()){
+					Edge min_edge=edges.peek();
+					if (min_edge!=null)
+					{
+						if (!primNodeSet.contains(min_edge.from_node) || !primNodeSet.contains(min_edge.to_node))
+						{
+							   min_wt=Math.min(min_wt,min_edge.weight);
+							   mst_edge=min_wt==min_edge.weight?min_edge:mst_edge;
+							   break;
+						}
+						else
+						{
+							adjlist.get(min_edge.from_node).remove(min_edge);
+							adjlist.get(min_edge.to_node).remove(min_edge);
+							
+						}		
+					}	
+				}
 			}
 			mst_wt+=min_wt;
-			primNodeList.add(mst_node);
+			primNodeSet.add(mst_edge.to_node);
+			primNodeSet.add(mst_edge.from_node);
+            adjlist.get(mst_edge.from_node).remove(mst_edge);
+            adjlist.get(mst_edge.to_node).remove(mst_edge);
 		}
 		
 		System.out.println(mst_wt);
 	}
 
+	static class Edge implements Comparable<Edge>{
+		int from_node;
+		int to_node;
+		int weight;
+		Edge(int from_node,int to_node,int weight){
+			this.from_node=from_node;
+			this.to_node=to_node;
+			this.weight=weight;
+		}
+		@Override
+		public int compareTo(Edge e) {
+			return Integer.valueOf(weight).compareTo(e.weight);
+		}	
+		
+	}
 }
